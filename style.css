@@ -6,12 +6,20 @@
 
 body {
     background-color: coral;
+    font: Arial, sans-serif;
+    font-size: 20px;
 }
 
 h1 {
-    font: 50px Arial, sans-serif;
-    margin-top: 10px;
+    font-size: 150%;
+    margin-top: 30px;
     margin-left: 30px;
+}
+
+h2 {
+    font-size: 90%;
+    margin-top: 15px;
+    margin-left: 70px;
 }
 
 svg {
