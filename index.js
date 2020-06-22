@@ -1,9 +1,10 @@
 //define svg for use
 const svg = document.querySelector('svg')
 const score = document.querySelector('#score')
+const level = document.querySelector('#level')
 
 //array of random colors
-const colors = ['red', 'blue', 'green'];
+const colors = ['rgba(142, 191, 63, .5)', 'rgba(191, 63, 65, .5)', 'rgba(63, 84, 191, .5)'];
 
 ///  FUNCTIONS  ///
 
@@ -12,11 +13,20 @@ function randomNumber(max, min=1) {
     return Math.floor(Math.random() * (max - min) + min); 
 }
 
+function triggerNextLevel() {
+    if(score.innerHTML >= 1500) {
+        level.innerHTML = 2;
+    } 
+    if(level.innerHTML === '2') {
+        document.body.style.backgroundColor = 'red';
+    }
+}
+
 ///  CIRCLE CLASS  ///
 
 class Circle{
     constructor(){ //may not need constructor if there is nothing passed
-    
+
     // constant variables //
     this.aboluteMaxRadius = 120
     this.aboluteMinRadius = 70
@@ -26,6 +36,7 @@ class Circle{
     this.maxRadius = randomNumber(this.aboluteMaxRadius, this.aboluteMinRadius)
     this.randomColor = colors[randomNumber(3,0)];
     this.id = randomNumber(9).toString()+randomNumber(9).toString()+randomNumber(9).toString() //assign the element a random id
+    this.speed = randomNumber(30, 20)
 
     const { aboluteMaxRadius } = this; //deconstruct for convenience
     this.cx = randomNumber((parseInt(svg.getAttribute("width")) - aboluteMaxRadius), aboluteMaxRadius) //random location svg. configured to not touch edge
@@ -45,6 +56,9 @@ class Circle{
         newCircle.setAttribute("fill", randomColor);
         
         svg.appendChild(newCircle); //add circle to svg
+        //svg.insertBefore(newCircle, svg.firstChild);
+        //svg.insertAdjacentElement('afterbegin', newCircle);
+
         this.targetCircle = document.getElementById(this.id) //target newly added circle
         this.targetCircle.addEventListener('click', this.clickCircle);
     }
@@ -73,6 +87,8 @@ class Circle{
                     try {
                         svg.removeChild(targetCircle); //remove child circle from svg
                         clearInterval(intervalFunc); //break out of interval
+                        score.innerHTML = score.innerHTML - 50;
+                        if (score.innerHTML <= 0) score.innerHTML = 0;
                     } catch (error) {
                         "error: already deleted"
                     }
@@ -81,10 +97,10 @@ class Circle{
             //~~~~~~~~~~~~~~~~~~~~~~~~~~~//
             //  DEFINE SPEED OF CIRCLE   //
             //~~~~~~~~~~~~~~~~~~~~~~~~~~~//
-            }, randomNumber(30, 20));
+            }, this.speed);
         };
         clickCircle = () => {
-            score.innerHTML++;
+            score.innerHTML = parseInt(score.innerHTML) + (this.aboluteMaxRadius - this.currentRadius);
             const { intervalFunc, targetCircle } = this;
             clearInterval(intervalFunc);
             svg.removeChild(targetCircle);
@@ -107,4 +123,5 @@ firstCircle.growShrinkRemove();
 const circleFactory = setInterval(() => {
     const endlessCircle = new Circle();
     endlessCircle.growShrinkRemove();
+    triggerNextLevel();
 }, 2000)
