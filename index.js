@@ -1,10 +1,44 @@
 //define svg for use
 const svg = document.querySelector('svg')
 const score = document.querySelector('#score')
-const level = document.querySelector('#level')
+const currentLevel = document.querySelector('#level').innerHTML
+const background = document.querySelector('rect')
+
+// background.setAttribute("fill", "yellow");
 
 //array of random colors
 const colors = ['rgba(142, 191, 63, .5)', 'rgba(191, 63, 65, .5)', 'rgba(63, 84, 191, .5)'];
+
+//level variables that will set the parameters of each level
+//  ex.   levels[currentLevel-1].nextLevel
+
+const levels = [
+    // level 1
+    {
+        nextLevel: 1500,
+        levelColors: ['rgba(142, 191, 63, .5)', 'rgba(191, 63, 65, .5)', 'rgba(63, 84, 191, .5)'],
+        levelBackgroundColor: "rgba(255,0,0,0.1)",
+        minGrowthSpeed: 50,
+        maxGrowthSpeed: 40,
+        minSpawnSpeed: 10,
+        maxSpawnSpeed: 30
+    },
+    // level 2
+    {
+        nextLevel: 3000,
+        levelColors: ['rgba(142, 191, 63, .8)', 'rgba(191, 63, 65, .8)', 'rgba(63, 84, 191, .8)'],
+        levelBackgroundColor: "pink" ,
+        minGrowthSpeed: 50,
+        maxGrowthSpeed: 40,
+        minSpawnSpeed: 10,
+        maxSpawnSpeed: 30
+    },
+    {
+        nextLevel: 5000,
+        levelColors: ['rgba(142, 191, 63, .6)', 'rgba(191, 63, 65, .6)', 'rgba(63, 84, 191, .6)'],
+        levelBackgroundColor: "green" 
+    }
+]
 
 ///  FUNCTIONS  ///
 
@@ -13,6 +47,7 @@ function randomNumber(max, min=1) {
     return Math.floor(Math.random() * (max - min) + min); 
 }
 
+// NEXT LEVEL LOGIC //
 function triggerNextLevel() {
     if(score.innerHTML >= 1500) {
         level.innerHTML = 2;
@@ -36,7 +71,9 @@ class Circle{
     this.maxRadius = randomNumber(this.aboluteMaxRadius, this.aboluteMinRadius)
     this.randomColor = colors[randomNumber(3,0)];
     this.id = randomNumber(9).toString()+randomNumber(9).toString()+randomNumber(9).toString() //assign the element a random id
-    this.speed = randomNumber(30, 20)
+    
+    //change speed 
+    this.speed = randomNumber(30, 10)
 
     const { aboluteMaxRadius } = this; //deconstruct for convenience
     this.cx = randomNumber((parseInt(svg.getAttribute("width")) - aboluteMaxRadius), aboluteMaxRadius) //random location svg. configured to not touch edge
@@ -56,6 +93,8 @@ class Circle{
         newCircle.setAttribute("fill", randomColor);
         
         svg.appendChild(newCircle); //add circle to svg
+        
+        ////these didn't work for some reason
         //svg.insertBefore(newCircle, svg.firstChild);
         //svg.insertAdjacentElement('afterbegin', newCircle);
 
@@ -94,9 +133,9 @@ class Circle{
                     }
                     break;
                 }
-            //~~~~~~~~~~~~~~~~~~~~~~~~~~~//
-            //  DEFINE SPEED OF CIRCLE   //
-            //~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+            //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+            //  DEFINE SPAWN SPEED OF CIRCLE   //
+            //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
             }, this.speed);
         };
         clickCircle = () => {
@@ -105,11 +144,16 @@ class Circle{
             clearInterval(intervalFunc);
             svg.removeChild(targetCircle);
         }
-
         get currentRadius() {
             return parseInt(this.targetCircle.getAttribute("r"));
-        };
+
+        }
+
 };
+
+// get currentLevel() {
+//     return parseInt(document.querySelector('#level'));
+// }
 
 //////////////////////////
 ///  initiate circles  ///
