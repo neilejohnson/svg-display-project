@@ -2,16 +2,19 @@
 <html>
     <head>
         <link rel="stylesheet" href="style.css">
+        <link rel="shortcut icon" type="image/png" href="img/favicon.png">
     </head>
     <body>
         <h1>Untitled Circle Game</h1>
-        <h2>score: <span id="score">1000</span></h2>
+        <h2>score: <span id="score">0</span></h2>
         <h2>level: <span id="level">1</span></h2>
         <svg width="1000" height="500">
         <!-- rx is rounded edge -->
         <rect width="1000" height="500" stroke="white" x="0", y="0" rx="15" fill=rgba(255,0,0,0.1) />
         </svg>
         <script src="index.js"></script>
+        <audio src="sound/sound.wav" id="sound"></audio>
+        
     </body>
 </html>
 
