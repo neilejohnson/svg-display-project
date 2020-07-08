@@ -24,14 +24,38 @@ class LevelManager{
             //level 2 goal
             500, 
             //level 3 goal
-            600
+            600,
+            //level 4 goal
+            800, 
+            //level 5 goal
+            1000, 
+            //level 6 goal
+            1200
         ]
+
+        this.backgroundColors = [
+            //level 1
+            'rgba(237, 235, 49, .42)',
+            //level 2
+            'rgba(192, 0, 0, .33)',
+            //level 3
+            'rgba(192, 0, 174, .51)',
+            //level 4
+            'rgba(0, 165, 192, .41)',
+            //level 5
+            'rgba(31, 255, 159, .43)',
+            //level 6
+            'rgba(96, 96, 96, .33)'
+        ]
+
     }
     updateProgress = () => {
         //if the player's score is greater than or equal to the current progression
         if(score.innerHTML >= this.progression[this.currentLevel - 1]) {
             //level goes up by 1
             this.currentLevel = this.currentLevel + 1;
+            console.log(this.backgroundColors)
+            this.changeBackground(this.backgroundColors[this.currentLevel - 1]);
         };
     };
     //change background color
@@ -70,6 +94,21 @@ class Circle{
         {
             maxRadius: 90, 
             minRadius: 40
+        },
+        //level 4
+        {
+            maxRadius: 120, 
+            minRadius: 70
+        }, 
+        //level 5
+        {
+            maxRadius: 100, 
+            minRadius: 60
+        },
+        //level 6
+        {
+            maxRadius: 90, 
+            minRadius: 40
         }
     ]
 
@@ -90,16 +129,37 @@ class Circle{
             highest: 40, 
             lowest: 45
         },
+        //level 4
+        {
+            highest: 50, 
+            lowest: 70
+        },
+        //level 5
+        {
+            highest: 45, 
+            lowest: 60
+        },
+        //level 6
+        {
+            highest: 40, 
+            lowest: 45
+        },
     ]
 
     //color of circles changes based on level
     this.colors = [
         //level 1
-        ['rgba(142, 191, 63, .5)', 'rgba(191, 63, 65, .5)', 'rgba(63, 84, 191, .5)'],
+        ['rgba(0, 176, 240, .71)', 'rgba(255, 255, 255, .71)', 'rgba(255, 0, 0, .71)'],
         //level 2
-        ['red', 'green', 'yellow'],
+        ['rgba(0, 32, 96, .71)', 'rgba(255, 255, 255, .71)', 'rgba(255, 255, 0, .71)'],
         //level 3
-        ['rgba(142, 191, 63, .7)', 'rgba(191, 63, 65, .7)', 'rgba(63, 84, 191, .7)']
+        ['rgba(255, 192, 0, .71)', 'rgba(255, 255, 255, .71)', 'rgba(0, 176, 240, .71)'],
+        //level 4
+        ['rgba(192, 0, 174, .71)', 'rgba(112, 173, 71, .71)', 'rgba(47, 85, 151, .71)'],
+        //level 5
+        ['rgba(0, 176, 240, .71)', 'rgba(192, 0, 174, .71)', 'rgba(255, 192, 0, .71)'],
+        //level 6
+        ['rgba(0, 112, 192, .71)', 'rgba(255, 255, 255, .71)', 'rgba(112, 48, 160, .71)']
     ]
 
     const { sizeRange, levelIndex, spawnSpeed, colors } = this;
@@ -199,6 +259,8 @@ class Circle{
 
 const levelManager = new LevelManager()
 
+levelManager.changeBackground(levelManager.backgroundColors[levelManager.currentLevel - 1])
+
 //////////////////////////
 ///  initiate circles  ///
 //////////////////////////
@@ -206,6 +268,8 @@ const levelManager = new LevelManager()
 //create one initially otherwise there is 4 second delay
 const firstCircle = new Circle(levelManager.currentLevel);
 firstCircle.growShrinkRemove();
+
+
 
 //create new circle every 2 seconds
 const circleFactory = setInterval(() => {
